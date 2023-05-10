@@ -1,0 +1,28 @@
+﻿@page "/loginpage"
+@using System.Text
+@using Shared
+@using Newtonsoft.Json
+@inject HttpClient httpClient;
+<h1>Welcome To Login</h1>
+<form action="" method="post" @onsubmit="@LoginCheck">
+    <label for="emailaddress">EmailAddress:</label>
+    <input type="text" class="form-control" id="emailaddress" name="email"  @bind="@EmailAddress"><br><br>
+    <label for="password">Password:</label>
+    <input type="password" class="form-control" id="password" name="password"  @bind="@Password"><br><br>
+    <input type="submit" value="Login">
+</form>
+@code {
+    private string EmailAddress{ get; set; }
+    private string Password { get; set; }
+    private async Task LoginCheck()
+    {
+        var formContent = new FormUrlEncodedContent(new[]
+        {
+
+            new KeyValuePair<string,string>("emailaddress",EmailAddress),
+            new KeyValuePair<string,string>("password",Password),
+    });
+        var responseData = await httpClient.PostAsync("/UserLogin/Login", formContent);
+        Console.WriteLine($"RQ_RS Response@@ {DateTime.Now}  @@Response {responseData}");
+    }
+}
